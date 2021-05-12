@@ -1,261 +1,132 @@
 
-# vue-img-cutter
-#### [中文文档](README-zh-CN.md)
+# vue-img-clipping
 
-A image crop plug-in for Vue,you can use it to rotate、zoom images and cut any size
+简单易用的vue图片裁剪插件，支持旋转、缩放、平移，固定比例，固定尺寸，远程图片裁剪，只需要很少的代码就可以实现裁剪功能，也可以通过调整参数以适应你自己的业务需求。
 
-[![GitHub stars](https://img.shields.io/github/stars/acccccccb/vue-img-cutter?style=for-the-badge)](https://github.com/acccccccb/vue-img-cutter/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/acccccccb/vue-img-cutter?style=for-the-badge)](https://github.com/acccccccb/vue-img-cutter/network)
-[![npm](https://img.shields.io/npm/v/vue-img-cutter?style=for-the-badge)](https://www.npmjs.com/package/vue-img-cutter)
-[![npm](https://img.shields.io/npm/dt/vue-img-cutter?style=for-the-badge)](https://www.npmjs.com/package/vue-img-cutter)
-
-### Features：
+### 特色：
 ---
- - For IE9+,MSEdge,Chrome,Firefox
- - Your can config it in line or modal
- - rotate、zoom
- - Cut to scale
- - Crop original image
- - Crop remote pictures
-
-### Screenshot：
+ - 兼容IE9+,MSEdge,Chrome,Firefox
+ - 两种展现形式，行内或弹窗
+ - 可旋转、缩放图片
+ - 任意比例、大小裁剪
+ - 固定比例、大小裁剪
+ - 支持远程图片裁剪、跨域设置
+### 插件截图：
 ----
-![Screenshot](https://i.bmp.ovh/imgs/2019/11/28f8a9059f089e05.png)
+![插件截图](https://i.bmp.ovh/imgs/2019/11/28f8a9059f089e05.png)
 
-### Demo：
+### 使用方法：
 ----
-[https://www.ihtmlcss.com/demo/dist/#/croptool](https://www.ihtmlcss.com/demo/dist/#/croptool)
-
-
-### Git：
-----
-Github：[https://github.com/acccccccb/vue-img-cutter](https://github.com/acccccccb/vue-img-cutter)
-
-码云：[https://gitee.com/GLUESTICK/vue-img-cutter](https://gitee.com/GLUESTICK/vue-img-cutter)
-
-**If this project is helpful to you, please give me a star :)**
-
-### Usage method：
-----
-1. Install
+1. 安装
 ```shell
-npm install vue-img-cutter --save-dev
+npm install vue-img-clipping --save-dev
 ```
-2. Import ImgCutter.vue：
+2. 将ImgCutter.vue文件引入项目：
 ```javascript
-import ImgCutter from 'vue-img-cutter'
-export default {
-        components:{
-            ImgCutter
-        },
+import ImgClipping from 'vue-img-clipping'
+export default {
+        components:{
+            ImgClipping
+        },
 ...
 }
 ```
-3. Write the code in template：
-
+3. 在页面中使用：
 ```html
-<ImgCutter v-on:cutDown="cutDown"></ImgCutter>
+<ImgClipping v-on:cutDown="cutDown"></ImgClipping>
 ```
-4. Solt
+4. 可使用solt
 ```html
-<ImgCutter v-on:cutDown="cutDown">
-    <button slot="open">Select image</button>
-</ImgCutter>
+<ImgClipping v-on:cutDown="cutDown">
+    <button slot="open">选择图片</button>
+</ImgClipping>
 ```
-5. This method to be compatible with IE9,it can also be used to crop cross domain images
-
-> - Create an object(name,src,~~width and height~~ are
-required).
-
-> - this.$refs.imgCutterModal.handleOpen(The Object).
-
+5. 远程、跨域裁剪（兼容IE9）
+> ~~需要自己写一个方法来触发裁剪工具弹出~~
+> ~~在方法中先将图片上传至服务器，拿到返回的url后创建一个obj，然后将对象传入裁剪工具~~
+> 2.1.9版本后只需要传入图片url和图片名称
 ```javascript
-// The object like this.
-let obj = {
-    name:'1.jpg',//Image name
-    src:'http://url/1.jpg',// Image url
-    //width:200,//Image width  remove in 2.1.9+
-    //height:200,//Image height remove in 2.1.9+
+// 传入的obj必须包含这四个属性
+let obj = {
+    name:'1.jpg',//远程图片名称
+    src:'http://url/1.jpg',//远程图片url
+    //width:200,//远程图片的原始宽度 2.1.9版本后不需要
+    //height:200,//远程图片的原始高度  2.1.9版本后不需要
 }
 ```
-
 ```javascript
-ForIE9:function(){
-	// First you need create object have name,src.
-	// Then trigger handleOpen(obj) and deliver the obj.
-	this.$refs.imgCutterModal.handleOpen({
-        name:"image.jpg",
-        src:"http://imageServ.com/image.jpg",
-    });
+forIe9:function(){
+    // 传入name，src name中必须包含后缀名
+    this.$refs.imgCutterModal.handleOpen({
+        name:"image.jpg",
+        src:"http://imageServ.com/image.jpg",
+    });
 }
 ```
-
-
-### Parameter description：
+### 参数说明：
 ----
-| Attribute | Effect | Type  | Require | Default |
+| 属性名 | 作用 | 类型  | 必填 | 默认值 |
 |:----:|:----:|:----:|:----:|:----:|
-|isModal|Is modal|Boolean|No|true|
-|showChooseBtn|Show select btn|Boolean|No|true|
-|lockScroll|Lock scroll when modal is show|Boolean|No|true|
-|label|Button text|String|No|选择图片|
-|boxWidth|Tool width|Number|No|800|
-|boxHeight|Tool height|Number|No|400|
-|cutWidth|Selection box width|Number|No|200|
-|cutHeight|Selection box height|Number|No|200|
-|tool|Show toolbar|Boolean|No|true|
-|toolBgc|Toolbar background color|String(eg: "#fff")|No|#fff|
-|sizeChange|Allow change size|Boolean|No|true|
-|moveAble|Allow change position|Boolean|No|true|
-|originalGraph|Crop original image|Boolean|No|false|
-|crossOrigin|Is cross origin image|Boolean|No|false|
-|crossOriginHeader|Set cross origin header|String|No|''|
-|rate|Aspect ratio|String(eg: "4:3")|No|-|
-|WatermarkText|Watermark Text|String|No|''|
-|WatermarkTextFont|Watermark font size|String|No|'12px Sans-serif'|
-|WatermarkTextColor|Watermark font color|String|No|'#fff'|
-|WatermarkTextX|Watermark position x|Number|No|0.95|
-|WatermarkTextY|Watermark position y|Number|No|0.95|
-|smallToUpload|If choose image size less then defined Size,return file. sizeChange must be false|Boolean|No|false|
-|saveCutPosition|Save last cut position and size|Boolean|No|false|
-|scaleAble|Allow scale image|Boolean|No|true|
-|imgMove|Allow move image|Boolean|No|true|
-|index|Return with result|Any|No|null|
-|previewMode|Return results at any time,in case of performance problems, set this to false|Boolean|No|true|
-|fileType|Return file type ( png / jpeg / webp)|String|No|png|
-
-### Hook function：
-| Attribute | Effect | Type  | Require | Return |
+|isModal|是否为弹窗模式|Boolean|否|true|
+|showChooseBtn|是否显示选择图片按钮|Boolean|否|true|
+|lockScroll|是否在Dialog出现时将body滚动锁定|Boolean|否|true|
+|label|默认打开裁剪工具按钮的显示文字|String|否|选择图片|
+|boxWidth|裁剪工具宽度|Number|否|800|
+|boxHeight|裁剪工具高度|Number|否|400|
+|cutWidth|默认裁剪宽度|Number|否|200|
+|cutHeight|默认裁剪高度|Number|否|200|
+|tool|是否显示工具栏|Boolean|否|true|
+|toolBgc|工具栏背景色|String(例: "#fff")|否|#fff|
+|sizeChange|是否能够调整裁剪框大小|Boolean|否|true|
+|moveAble|能否调整裁剪区域位置|Boolean|否|true|
+|imgMove|能否拖动图片|Boolean|否|true|
+|originalGraph|是否直接裁剪原图|Boolean|否|false|
+|crossOrigin|是否设置跨域，需要服务器做相应更改|Boolean|否|false|
+|crossOriginHeader|设置跨域信息crossOrigin为true时才生效|String|否|''|
+|rate|图片比例|String(例: "4:3")|否|-|
+|WatermarkText|水印文字|String|否|''|
+|WatermarkTextFont|水印文字字体|String|否|'12px Sans-serif'|
+|WatermarkTextColor|水印文字颜色|String|否|'#fff'|
+|WatermarkTextX|水印文字水平位置|Number|否|0.95|
+|WatermarkTextY|水印文字垂直位置|Number|否|0.95|
+|smallToUpload|如果裁剪尺寸固定且图片尺寸小于裁剪尺寸则不裁剪直接返回文件|Boolean|否|false|
+|saveCutPosition|是否保存上一次裁剪位置及大小|Boolean|否|false|
+|scaleAble|是否允许滚轮缩放图片|Boolean|否|true|
+|index|自定义参数，将会同结果一起返回|Any|否|null|
+|previewMode|裁剪过程中是否返回裁剪结果，如果裁剪出现卡顿时将此项设置为false|Boolean|否|true|
+|fileType|返回的文件类型 ( png / jpeg / webp)|String|否|png|
+> 支持slot，在组件内部使用带有slot="open"属性的元素即可自定义打开组件的按钮
+### 钩子函数：
+| 属性名 | 作用 | 类型  | 必填 | 返回值 |
 |:----:|:----:|:----:|:----:|:----:|
-|cutDown|Cut down image|Function|Yes|Object|
-|error|Throw error|Function|No|Error object|
-|onChooseImg|ChooseImg|Function|No|Object|
-|onPrintImg|Print image to canvas|Function|No|Object|
-|onClearAll|Clear all|Function|No|null|
-
-
-### Slot（You can use slot="slot name" to custom button）：
-| Slot name | Effect |
+|cutDown|完成截图后要执行的方法|Function|是|Object|
+|error|错误回调|Function|否|Error object|
+|onChooseImg|选择图片后|Function|否|Object|
+|onPrintImg|在画布上绘制图片|Function|否|Object|
+|onClearAll|清空画布|Function|否|null|
+### 插槽(slot)：
+| 插槽名称 | 作用  |
 |:----:|:----:|
-|open|Choose btn|
-|openImgCutter|Choose btn|
-|choose|Choose btn(in tool)|
-|cancel|Cancel btn|
-|confirm|Confirm btn|
-|ratio|Toolbar ratio|
-|scaleReset|Toolbar reset scale|
-|turnLeft|Toolbar turn left|
-|turnRight|Toolbar turn right|
-|reset|Toolbar reset|
-|flipHorizontal|Toolbar flip horizontal|
-|flipVertically|Toolbar flip vertically|
-
-### Return @cutDown：
+|open 或 openImgCutter|弹出裁剪框|
+|choose|选择本地图片|
+|cancel|取消/清空|
+|confirm|确认裁剪|
+|ratio|工具栏：宽高比|
+|scaleReset|工具栏： 重置缩放|
+|turnLeft|工具栏： 向左旋转|
+|turnRight|工具栏： 向右旋转|
+|reset|工具栏： 重置旋转|
+|flipHorizontal|工具栏： 水平翻转|
+|flipVertically|工具栏： 垂直翻转|
+### 返回值 @cutDown：
 ----
-| Attribute | Description  |
+| 属性名 | 类型  |
 |:----:|:----:|
-|fileName|File name|
-|file|File(Some versions of IE is not support)|
-|blob|Blob(Some versions of IE is not support)|
+|fileName|文件名|
+|file|file类型的文件对象（IE部分版本可能不会返回）|
+|blob|blob类型的文件对象（IE部分版本可能不会返回）|
 |dataURL|dataURL|
+|index|Any|
 
-### Development：
-- Original picture
-- Mirror
 
-### Donation:
 
-![微信](https://www.ihtmlcss.oss-cn-chengdu.aliyuncs.com/2020/01/weixinpay.png)
-![支付宝](https://www.ihtmlcss.oss-cn-chengdu.aliyuncs.com/2020/01/alipay.png)
-
-### Update log：
-----
-#### 2.2.3
-- Bug fix: When you set rate,the control-box didn't reach the expected position [#I3OXMW](https://gitee.com/GLUESTICK/vue-img-cutter/issues/I3OXMW)
-#### 2.2.2
-- New prop( imgMove ): Allow move img, default: true
-#### 2.2.1
-- New prop( fileType )：Return file type, default: png
-#### 2.2.0
-- New prop( index )：Return result with index.
-- New prop( previewMode )：Return results at any time,in case of performance problems, set this to false.
-- Fix Bug：Update style.
-#### 2.1.10
-- New features:
-- 1.saveCutPosition:Save last cut position and size
-- 2.scaleAble:Able/Disable scale image
-#### 2.1.9
-- Crop original image not need imageObj.width and imageObj.height
-#### 2.1.8
-- New features：smallToUpload, If choose image size less then defined Size,return file. sizeChange must be false. #20
-#### 2.1.7
-- Fix bug:#21 cropPicture() missed params
-#### 2.1.6
-- Add new hook function：onClearAll,onPrintImg,onChooseImg
-#### 2.1.5
-- Fix bug:Button add attrib type=button
-#### 2.1.4
-- Fix bug:Width display error
-#### 2.1.3
-- Fix bug:When no choose Image,you also can get an empty image,now you will get an error message in error callback
-- Fix bug:When rate < 0 the result image size error;
-#### 2.1.2
-- New features:flip horizontal,flip vertically,Watermark
-- Add slot:ratio,scaleReset,turnLeft,turnRight,reset,flipHorizontal,flipVertically
-#### 2.1.1
-- Add english documents
-#### 2.1.0
-- Add new attribute:originalGraph，originalGraph
-- Fix bug: Inline mode can not scale image.
-#### 2.0.30
-- Fix bug: Constituency overflow.
-#### 2.0.29
-- UI optimization.
-#### 2.0.28
-- Show version
-- New slot：choose/cancel/confirm
-- New attribute：toolBgc
-- Fix bug: Constituency overflow.
-#### 2.0.27
-- Fix bug:Remote image in the wrong place.
-- Fix bug:An error occurred when click cancel btn in IE.
-- Fix bug:Error loading remote picture will be correctly handle.
-#### 2.0.26
-- Fix bug:An error occurred when not choose any image.
-#### 2.0.25
-- Update readme.md
-#### 2.0.24
-- Update crop remote pictures method. eg:this.$refs['yourComponent'].handleOpen(imgObj),imgObj must include(name,src,width,height)
-- Fix bug: Inline mode can not scale image.
-- New attribute： crossOrigin,crossOriginHeader
-- New attribute： error,It can catch error.
-#### 2.0.23
-- New attribute：isModal/showChooseBtn/lockScroll
-#### 2.0.22
-- For IE9+,MSEdge,chrome,firefox
-- UI optimization.
-#### 2.0.21
-- For IE8+,MSEdge,chrome,firefox
-- New attribute：moveAble,sizeChange
-- Fix bug:File is not return.
-#### 2.0.20
-- For IE11+,MSEdge,Chrome,Firefox
-
-#### 2.0.19
-- Result add file.
-
-#### 2.0.18
-
-- Fix bug:Reload pages when first click select image btn.
-
-#### 2.0.17
-
-- UI optimization.
-
-#### 2.0.16
-
-- UI optimization.
-
-#### 2.0.15
-
-- UI optimization.

@@ -506,7 +506,7 @@
                 </div>
             </div>
         </div>
-        <div class="row bg">
+        <!-- <div class="row bg">
             <div class="col-md-10 offset-md-1">
                 <h1 class="bd-title">
                     <i class="fa fa-magic"></i> Donation
@@ -526,8 +526,8 @@
                     <div class="text-center">支付宝 Alipay</div>
                 </div>
             </div>
-        </div>
-        <div class="row bg grayBg" style="padding-bottom:20px;margin-top:50px;">
+        </div> -->
+        <!-- <div class="row bg grayBg" style="padding-bottom:20px;margin-top:50px;">
             <div class="col">
                 <blockquote class="blockquote text-center">
                     <p class="mb-0">
@@ -543,7 +543,7 @@
                     </footer>
                 </blockquote>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>
 

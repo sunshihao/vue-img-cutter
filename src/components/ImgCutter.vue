@@ -172,16 +172,6 @@
                                             <div class="toolBoxControlLine toolBoxControlLineItem-4"></div>
                                         </div>
                                     </div>
-                                    <div class="copyright">
-                                        <a
-                                            v-if="!DoNotDisplayCopyright"
-                                            target="_blank"
-                                            href="https://github.com/acccccccb/vue-img-cutter"
-                                             rel="nofollow"
-                                        >
-                                            vue-img-cutter {{version}}
-                                        </a>
-                                    </div>
                                     <!--画布-->
                                     <canvas
                                         class="canvasSelectBox"
